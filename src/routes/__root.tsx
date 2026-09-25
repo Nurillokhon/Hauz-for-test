@@ -5,6 +5,8 @@ import {
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 
+import { currentUserQuery } from '#/auth/queries'
+
 import appCss from '../styles.css?url'
 
 export interface RouterContext {
@@ -12,6 +14,13 @@ export interface RouterContext {
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+  // Runs on the server for the first request, so every page, and the header,
+  // renders already knowing who is signed in.
+  beforeLoad: async ({ context }) => {
+    const user = await context.queryClient.ensureQueryData(currentUserQuery)
+
+    return { user }
+  },
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
