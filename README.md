@@ -1,7 +1,9 @@
-# HAUZ frontend take-home starter
+# HAUZ frontend take-home
 
-A blank TanStack Start app plus the Appwrite Function you will call from it.
-Read `TASK.md` for what to build. This file is only about getting it running.
+Email-code sign-in, onboarding, a profile page and a server-rendered header,
+built on TanStack Start and Appwrite. `TASK.md` is the brief, `NOTES.md` has
+the decisions and where I departed from the brief. This file is about getting
+it running.
 
 ## What you need
 
@@ -78,16 +80,40 @@ npm run dev
 
 http://localhost:3000
 
+## Try it
+
+1. Open http://localhost:3000 and click **Sign in**.
+2. Enter your email, then the 6-digit code Appwrite sends you.
+3. A new person lands on onboarding; someone with an account skips it.
+4. Click your name in the header to edit your profile. Emptying contact email
+   or bio and saving removes it.
+5. **Log out** from the header.
+
+Signed out, open http://localhost:3000/profile: you are sent to sign in and
+brought back to `/profile` afterwards.
+
 ## What is in here
 
 ```
-src/                          the app you are building; it is empty on purpose
-  router.tsx                  router setup
-  routes/__root.tsx           the document shell
-  routes/index.tsx            placeholder home page
-functions/personal-account/   the Function, already written
+src/
+  router.tsx                  router setup, one QueryClient per request
+  routes/__root.tsx           document shell; loads the user on the server
+  routes/index.tsx            home page
+  routes/sign-in.tsx          email, then code
+  routes/onboarding.tsx       first name, last name, role
+  routes/profile.tsx          view and edit the Personal Account
+  components/Header.tsx       "Sign in", or first name and "Log out"
+  auth/functions.ts           server functions: send code, verify, current user, log out
+  auth/redirect.ts            keeps the ?redirect param on this site
+  account/functions.ts        server functions that call the personal-account Function
+  account/schema.ts           Personal Account type and input rules
+  server/                     server-only: Appwrite clients, session cookie, env, errors
+functions/personal-account/   the Function, unchanged
 appwrite.config.json          database, table and Function definitions
 ```
+
+Everything under `src/server/` is marked server-only. The session secret lives
+in an httpOnly cookie and the API key never leaves the server.
 
 Other scripts:
 
