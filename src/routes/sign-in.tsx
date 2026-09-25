@@ -113,7 +113,8 @@ function CodeStep({
         navigate({ href: target, replace: true });
       } else {
         navigate({
-          href: `/onboarding?redirect=${encodeURIComponent(target)}`,
+          to: '/onboarding',
+          search: { redirect: target },
           replace: true,
         });
       }
