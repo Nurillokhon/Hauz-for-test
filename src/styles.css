@@ -36,3 +36,16 @@ button {
   padding: 0.4rem 0.9rem;
   font: inherit;
 }
+
+header nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+}
+
+header button {
+  margin-top: 0;
+}

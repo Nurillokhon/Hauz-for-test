@@ -5,7 +5,9 @@ import {
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 
+import { personalAccountQuery } from '#/account/queries'
 import { currentUserQuery } from '#/auth/queries'
+import { Header } from '#/components/Header'
 
 import appCss from '../styles.css?url'
 
@@ -15,9 +17,17 @@ export interface RouterContext {
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   // Runs on the server for the first request, so every page, and the header,
-  // renders already knowing who is signed in.
+  // renders already knowing who is signed in and what their name is.
   beforeLoad: async ({ context }) => {
     const user = await context.queryClient.ensureQueryData(currentUserQuery)
+
+    if (user) {
+      // The name is for the header only. If it cannot load, the header falls
+      // back to the email address rather than failing the whole page.
+      await context.queryClient
+        .ensureQueryData(personalAccountQuery)
+        .catch(() => null)
+    }
 
     return { user }
   },
@@ -39,7 +49,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {/* The site header belongs here. See TASK.md. */}
+        <Header />
         {children}
         <Scripts />
       </body>
