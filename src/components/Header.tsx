@@ -25,7 +25,7 @@ export function Header() {
         {user ? (
           <span>
             {/* Signed in but not onboarded yet: there is no name to show. */}
-            <span>{account?.firstName ?? user.email}</span>{' '}
+            <Link to="/profile">{account?.firstName ?? user.email}</Link>{' '}
             <LogoutButton />
           </span>
         ) : (
